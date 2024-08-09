@@ -1,0 +1,16 @@
+version: '3'
+services:
+  cypress:
+    image: docker-registry.production.smartbox.com/cypress/included:13.10.0
+    volumes:
+      - ${SSH_AUTH_SOCK}:/tmp/ssh-agent/ssh-agent.sock:ro
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ~/.Xauthority:/.Xauthority
+      - .:/e2e
+    entrypoint: []
+    working_dir: /e2e
+    environment:
+      - DISPLAY=$DISPLAY # uncomment for Windows/Linux
+      # - DISPLAY=host.docker.internal:0 #  uncomment for MacOs with Colima
+    command: ["sh", "-c",  "tail -f /dev/null"]
+    network_mode: "host"

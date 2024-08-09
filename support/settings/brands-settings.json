@@ -1,0 +1,546 @@
+{
+  "sbx": {
+    "fr_FR": {
+      "boxes": {
+        "stay": {
+          "id": 1177,
+          "value": 69.90,
+          "experienceId": 604323,
+          "activityType": "details/sbx"
+        },
+        "stay_onreq": {
+          "id": 1177,
+          "value": 69.90,
+          "experienceId": 19146,
+          "activityType": "details/sbx"
+        },
+        "stay_upgrade": {
+          "id": 1177,
+          "value": 69.90,
+          "experienceId": 124650,
+          "activityType": "details/sbx"
+        },  
+        "stay_upgrade_2_nights": {
+          "id": 851518,
+          "value": 99.90,
+          "experienceId": 100496,
+          "activityType": "details/sbx"
+        },      
+        "stay_oob": {
+          "id": 1177,
+          "value": 69.90,
+          "oobActivityType": "details/sbx",
+          "oobBoxId": 506043,
+          "oobExperienceId": 58565
+        },
+        "nonStay": {
+          "id": 1109578,
+          "value": 74.9,
+          "apiExperienceId": 2586,
+          "experienceId": "00135430",
+          "partnerId": "00099717",
+          "activityType": "catalog/activity",
+          "plusBoxId": "1132738",
+          "plusPartnerId": "00021274"
+        },
+        "Subcription": {
+          "id": 2338,
+          "value": 34.9,
+          "experienceId": 1385093,
+          "activityType": "catalog/activity"
+        },
+        "wbe": {
+          "id": 848131,
+          "value": 199.90,
+          "experienceId": 2000187881,
+          "activityType": "details/bed-bank"
+        },
+        "mtt": {
+          "id": 859345,
+          "value": 99.9,
+          "experienceId": "1140986",
+          "experienceIdPlusOfAdv": "1247663",
+          "partnerIdPlusOfAdv": "91214",
+          "experienceIdPlusOfWel": "1389127",
+          "partnerIdPlusOfWel": "00065172",
+          "experienceIdPlusOfGas": "545675",
+          "partnerIdPlusOfGas": "00623108",
+          "activityType": "catalog/activity"
+        }
+      },
+      "currency": "EUR",
+      "posId": "00206236",
+      "beneficiary": {
+        "id": "7983772",
+        "title": "Monsieur",
+        "firstName": "Louis",
+        "lastName": "Berge",
+        "address": "123 Street",
+        "postCode": "12345",
+        "city": "Paris",
+        "phoneNumber": "1234567890"
+      },
+      "filters": {
+        "partnerUpgradeName": "Le Bien-Être sur la Colline"
+      }
+    },
+    "es_ES": {
+      "boxes": {
+        "stay": {
+          "id": 549372,
+          "value": 99.9
+        },
+        "nonStay": {
+          "id": 1876,
+          "value": 19.90,
+          "experience": 1
+        }
+      },
+      "currency": "EUR",
+      "posId": "00222645",
+      "beneficiary": {
+        "title": "Sr.",
+        "firstName": "Santiago",
+        "lastName": "Bernabéu",
+        "address": "123 Street",
+        "postCode": "12345",
+        "city": "Madrid",
+        "phoneNumber": "123456789"
+      },
+      "filters": {
+        "partnerUpgradeName": "Las Termas de Ruham Castellón Centro"
+      }
+    },
+    "it_IT": {
+      "boxes": {
+        "stay": {
+          "id": 847577,
+          "value": 129.9
+        },
+        "nonStay": {
+          "id": 1782,
+          "value": 29.90,
+          "experience": 1,
+          "experienceId": "00030670",
+          "partnerId": "00030670",
+          "activityType": "activity",
+          "plusBoxId": "1134879",
+          "plusPartnerId": "00063684"
+        },
+        "Winebox": {
+          "id": 1782,
+          "value": 29.90,
+          "experience": 1
+        },
+        "sev": {
+          "id": 1152849,
+          "value": 999.9,
+          "experienceId": 1151419,
+          "activityType": "catalog/activity"
+        },
+        "dayReservation": {
+          "id": 1259308,
+          "value": 129.9,
+          "experienceId": 1267416,
+          "activityType": "catalog/activity"
+        },
+        "daysout": {
+          "id": 1464194,
+          "value": 48,
+          "experienceId": 1465179,
+          "activityType": "details/days-out"
+        },
+        "concierge":{
+          "id": 1247150,
+          "value": 259.90,
+          "experienceId": 1427433
+        },
+        "wbe": {
+          "id": 847836,
+          "value": 189.9,
+          "experienceId": 2000187881,
+          "activityType": "details/bed-bank"
+        }
+      },
+      "currency": "EUR",
+      "posId": "00231448",
+      "beneficiary": {
+        "title": "Sig.",
+        "firstName": "San",
+        "lastName": "Siro",
+        "address": "123 Street",
+        "postCode": "12345",
+        "city": "Milano",
+        "phoneNumber": "0123456789"
+      },
+      "filters": {
+        "partnerUpgradeName": "Macro Estetica"
+      }
+    },
+    "it_CH": {
+      "boxes": {
+        "stay": {
+          "id": 2061,
+          "value": 199.9
+        },
+        "nonStay": {
+          "id": 1941,
+          "value": 49.90,
+          "experience": 1
+        }
+      },
+      "currency": "CHF",
+      "posId": "00209442",
+      "beneficiary": {
+        "title": "Sig.",
+        "firstName": "Stadio",
+        "lastName": "Riva IV",
+        "address": "123 Street",
+        "postCode": "1234",
+        "city": "Chiasso",
+        "phoneNumber": "0123456789"
+      },
+      "filters": {
+        "partnerUpgradeName": "Château de Vaas"
+      }
+    },
+    "de_CH": {
+      "boxes": {
+        "stay": {
+          "id": 2061,
+          "value": 199.90
+        },
+        "nonStay": {
+          "id": 2432,
+          "value": 79.90,
+          "experience": 1
+        }
+      },
+      "currency": "CHF",
+      "posId": "00209442",
+      "beneficiary": {
+        "title": "Herr",
+        "firstName": "Letzigrund",
+        "lastName": "Stadion",
+        "address": "123 Street",
+        "postCode": "1234",
+        "city": "Zürich",
+        "phoneNumber": "0123456789"
+      },
+      "filters": {
+        "partnerUpgradeName": "Asian Wellness"
+      }
+    },
+    "fr_CH": {
+      "boxes": {
+        "stay": {
+          "id": 2061,
+          "value": 199.90
+        },
+        "nonStay": {
+          "id": 2432,
+          "value": 79.90,
+          "experience": 1
+        }
+      },
+      "currency": "CHF",
+      "posId": "00209442",
+      "beneficiary": {
+        "title": "Monsieur",
+        "firstName": "Stade",
+        "lastName": "de Genève",
+        "address": "123 Street",
+        "postCode": "1234",
+        "city": "Genève",
+        "phoneNumber": "0123456789"
+      },
+      "filters": {
+        "partnerUpgradeName": "Asian Wellness"
+      }
+    },
+    "da_DK": {
+      "boxes": {
+        "stay": {
+          "id": 1342239,
+          "value": 999
+        },
+        "nonStay": {
+          "id": 905352,
+          "value": 399.00
+        }
+      },
+      "currency": "DKK",
+      "posId": "00505974",
+      "beneficiary": {
+        "title": "Hr.",
+        "firstName": "Stadio",
+        "lastName": "Parken",
+        "address": "123 Street",
+        "postCode": "2400",
+        "city": "Copenaghen",
+        "phoneNumber": "1234567890"
+      },
+      "filters": {
+        "partnerUpgradeName": "Havnsøs Massør"
+      }
+    },
+    "sv_SE": {
+      "boxes": {
+        "stay": {
+          "id": 905464,
+          "value": 2599
+        }
+      },
+      "currency": "SEK",
+      "posId": "00505967",
+      "beneficiary": {
+        "title": "Herr",
+        "firstName": "Stockholm",
+        "lastName": "Olympic Stadium",
+        "address": "123 Street",
+        "postCode": "12345",
+        "city": "Stockholm",
+        "phoneNumber": "0123456789"
+      }
+    }
+  },
+  "dak": {
+    "es_ES": {
+      "boxes": {
+        "stay": {
+          "id": 2143,
+          "value": 79.9
+        }
+      },
+      "currency": "EUR",
+      "posId": "00228331",
+      "beneficiary": {
+        "title": "Sr.",
+        "firstName": "Santiago",
+        "lastName": "Bernabéu",
+        "address": "123 Street",
+        "postCode": "12345",
+        "city": "Madrid",
+        "phoneNumber": "123456789"
+      }
+    },
+    "fr_FR": {
+      "boxes": {
+        "stay": {
+          "id": 847557,
+          "value": 189.9
+        },
+        "nonStay": {
+          "id": 510713,
+          "value": 29.90
+        }
+      },
+      "currency": "EUR",
+      "posId": "00206236",
+      "beneficiary": {
+        "title": "Monsieur",
+        "firstName": "Louis",
+        "lastName": "Berge",
+        "address": "123 Street",
+        "postCode": "12345",
+        "city": "Paris",
+        "phoneNumber": "1234567890"
+      },
+      "filters": {
+        "partnerUpgradeName": "Cocoon et Moi 35"
+      }
+    }
+  },
+  "emo": {
+    "it_IT": {
+      "boxes": {
+        "stay": {
+          "id": 848490,
+          "value": 59.9
+        },
+        "nonStay": {
+          "id": 2428,
+          "value": 44.90
+        }
+      },
+      "currency": "EUR",
+      "posId": "00210655",
+      "beneficiary": {
+        "title": "Sig.",
+        "firstName": "San",
+        "lastName": "Siro",
+        "address": "123 Street",
+        "postCode": "12345",
+        "city": "Milano",
+        "phoneNumber": "0123456789"
+      },
+      "filters": {
+        "partnerUpgradeName": "Palestra & Centro Benessere 360°"
+      }
+    }
+  },
+  "lav": {
+    "es_ES": {
+      "boxes": {
+        "stay": {
+          "id": 2161,
+          "value": 99.9
+        },
+        "nonStay": {
+          "id": 1973,
+          "value": 19.90
+        }
+      },
+      "currency": "EUR",
+      "posId": "00210689",
+      "beneficiary": {
+        "title": "Sr.",
+        "firstName": "Santiago",
+        "lastName": "Bernabéu",
+        "address": "123 Street",
+        "postCode": "12345",
+        "city": "Madrid",
+        "phoneNumber": "123456789"
+      },
+      "filters": {
+        "partnerUpgradeName": "Las Termas de Ruham Castellón Centro"
+      }
+    }
+  },
+  "bon": {
+    "nl_NL": {
+      "boxes": {
+        "stay": {
+          "id": 1341985,
+          "value": 69.9,
+          "experienceId": 949806,
+          "activityType": "details/sbx"
+        },
+        "nonStay": {
+          "id": 870132,
+          "value": 49.90
+        }
+      },
+      "currency": "EUR",
+      "posId": "00505984",
+      "beneficiary": {
+        "title": "M.",
+        "firstName": "Amsterdam",
+        "lastName": "Arena",
+        "address": "123 Street",
+        "postCode": "1000 AP",
+        "city": "Amsterdam",
+        "phoneNumber": "0123456789"
+      },
+      "filters": {
+        "partnerUpgradeName": "Floaten en Zoutkamer Zwolle"
+      }
+    },
+    "nl_BE": {
+      "boxes": {
+        "stay": {
+          "id": 870048,
+          "value": 139.9,
+          "experienceId": 949985,
+          "activityType": "details/sbx"
+        },
+        "nonStay": {
+          "id": 848592,
+          "value": 49.9,
+          "experienceId": "00117369",
+          "partnerId": "00147939",
+          "activityType": "catalog/activity"
+        },
+        "Winebox": {
+          "id": 1233682,
+          "value": 59.9,
+          "experienceId": 1269275,
+          "experienceId2": 1269273,
+          "activityType": "catalog/activity"
+        },
+        "Magazine": {
+          "id": 872452,
+          "value": 34.9,
+          "experienceId": 944308,
+          "activityType": "catalog/activity"
+        }
+      },
+      "currency": "EUR",
+      "posId": "00505984",
+      "beneficiary": {
+        "title": "M.",
+        "firstName": "Amsterdam",
+        "lastName": "Arena",
+        "address": "123 Street",
+        "postCode": "1234",
+        "city": "Amsterdam",
+        "phoneNumber": "0123456789"
+      },
+      "filters": {
+        "partnerUpgradeName": "Floaten en Zoutkamer Zwolle"
+      }
+    },
+    "fr_BE": {
+      "boxes": {
+        "stay": {
+          "id": 870009,
+          "value": 139.9
+        }
+      },
+      "currency": "EUR",
+      "posId": "00505982",
+      "beneficiary": {
+        "title": "Monsieur",
+        "firstName": "Louis",
+        "lastName": "Berge",
+        "address": "123 Street",
+        "postCode": "12345",
+        "city": "Paris",
+        "phoneNumber": "0123456789"
+      }
+    }
+  },
+  "cbx": {
+    "fr_BE": {
+      "boxes": {
+        "stay": {
+          "id": 1084434,
+          "value": 139.9
+        }
+      },
+      "currency": "EUR",
+      "posId": "00505979",
+      "beneficiary": {
+        "title": "Monsieur",
+        "firstName": "Louis",
+        "lastName": "Berge",
+        "address": "123 Street",
+        "postCode": "12345",
+        "city": "Paris",
+        "phoneNumber": "0123456789"
+      }
+    },
+    "nl_BE": {
+      "boxes": {
+        "stay": {
+          "id": 1084434,
+          "value": 139.90
+        }
+      },
+      "currency": "EUR",
+      "posId": "00505979",
+      "beneficiary": {
+        "title": "M.",
+        "firstName": "Amsterdam",
+        "lastName": "Arena",
+        "address": "123 Street",
+        "postCode": "1000 AP",
+        "city": "Amsterdam",
+        "phoneNumber": "0123456789"
+      },
+      "filters": {
+        "partnerUpgradeName": "Floaten en Zoutkamer Zwolle"
+      }
+    }
+  }
+}
