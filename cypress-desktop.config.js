@@ -40,4 +40,7 @@ module.exports = defineConfig({
         supportFile: './support/e2e.js',
         specPattern: './e2e/**/*.js',
     },
+    env: {
+        "startDate": "August 19, 2024"
+    }
 });

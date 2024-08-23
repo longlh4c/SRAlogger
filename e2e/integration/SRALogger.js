@@ -8,13 +8,13 @@ beforeEach(() => {
 
 describe('Log timesheet SRA', () => {
     it('Log from start date to today', { tags: ['@sbx_fr'] }, () => {
-        cy.visit(ConfigHelper.getTimesheetURL())
-        cy.pause(10000)
+        cy.visit(ConfigHelper.getTimesheetURL());
+        cy.pause(10000);
 
-        let startDate = ['July 29, 2024']
+        let startDate = Cypress.env('startDate');
 
-        Timesheet.clickTimesheetMenuButton()
-        Timesheet.verifyUrl()
+        Timesheet.clickTimesheetMenuButton();
+        Timesheet.verifyUrl();
         Timesheet.logDate(startDate, 'Smartbox Dedicated team', 'Test execution', 'Manual & Auto test', 8);
     });
 });
