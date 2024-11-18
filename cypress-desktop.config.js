@@ -41,6 +41,6 @@ module.exports = defineConfig({
         specPattern: './e2e/**/*.js',
     },
     env: {
-        "startDate": "August 19, 2024"
+        "startDate": "November 4, 2024"
     }
 });

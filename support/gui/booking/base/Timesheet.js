@@ -38,19 +38,31 @@ class Timesheet extends commonPage {
         cy.get(ELEMENT.buttonLog).first().click();
     }
 
-    logDate(startDateS, project, typeOfWork, desc, hours) {
-        let startDate = new Date(startDateS);
+    logDate(noDatesBefore, project, typeOfWork, desc, hours) {
+        let unformattedStartDate = this.addDays(new Date(), noDatesBefore);
+        let startDate = this.formatDate(unformattedStartDate);
+
         for (let i = 0; i < 5; i++) {
             //July 23, 2024
             this.clickLogButton();
             this.checkLogworkModalDisplayed();
 
-            let month = startDateS.toString().split(' ')[0];
+            let weekend = unformattedStartDate.toString().split(' ')[0];
+            if (weekend === 'Sat') {
+                unformattedStartDate = new Date(this.addDays(startDate, 2));
+                startDate = this.formatDate(unformattedStartDate);
+            }
+            if (weekend === 'Sun') {
+                unformattedStartDate = new Date(this.addDays(startDate, 1));
+                startDate = this.formatDate(unformattedStartDate);
+            }
+
+            let month = startDate.toString().split(' ')[0];
 
             cy.get(ELEMENT.datePicker).click();
             cy.get(ELEMENT.monthPicker).select(month, { force: true });
             cy.wait(1000);
-            let selectDate = '//*[contains(@class, "flatpickr-day")][not(contains(@class, "flatpickr-disabled"))][@aria-label="' + startDateS + '"]'
+            let selectDate = '//*[contains(@class, "flatpickr-day")][not(contains(@class, "flatpickr-disabled"))][@aria-label="' + startDate + '"]'
 
             cy.xpath(selectDate).click();
             cy.wait(1000);
@@ -73,13 +85,7 @@ class Timesheet extends commonPage {
                     cy.get(ELEMENT.buttonCancel).click();
                 }
             });
-            startDate = new Date(this.addDays(startDate, 1));
-
-            let weekend = startDate.toString().split(' ')[0];
-            if (weekend === 'Sat') startDate = new Date(this.addDays(startDate, 2));
-            if (weekend === 'Sun') startDate = new Date(this.addDays(startDate, 1));
-
-            startDateS = this.formatDate(startDate);
+            startDate = this.formatDate(new Date(this.addDays(startDate, 1)));
         }
     }
 

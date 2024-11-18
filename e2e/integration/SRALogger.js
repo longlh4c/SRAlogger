@@ -11,10 +11,10 @@ describe('Log timesheet SRA', () => {
         cy.visit(ConfigHelper.getTimesheetURL());
         cy.pause(10000);
 
-        let startDate = Cypress.env('startDate');
+        // let startDate = Cypress.env('startDate');
 
         Timesheet.clickTimesheetMenuButton();
         Timesheet.verifyUrl();
-        Timesheet.logDate(startDate, 'Smartbox Dedicated team', 'Test execution', 'Manual & Auto test', 8);
+        Timesheet.logDate(-9, 'Smartbox Dedicated team', 'Test execution', 'Manual & Auto test', 8);
     });
 });
