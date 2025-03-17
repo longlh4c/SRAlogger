@@ -15,6 +15,6 @@ describe('Log timesheet SRA', () => {
 
         Timesheet.clickTimesheetMenuButton();
         Timesheet.verifyUrl();
-        Timesheet.logDate(-1, 'Smartbox Dedicated team', 'Test execution', 'Manual & Auto test', 8);
+        Timesheet.logDate(-8, 'Smartbox Dedicated team', 'Test execution', 'Manual & Auto test', 8);
     });
 });

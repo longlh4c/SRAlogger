@@ -38,8 +38,8 @@ class Timesheet extends commonPage {
         cy.get(ELEMENT.buttonLog).first().click();
     }
 
-    logDate(noWeeksBefore, project, typeOfWork, desc, hours) {
-        let unformattedStartDate = this.addDays(new Date(), noWeeksBefore * 7);
+    logDate(noDaysBefore, project, typeOfWork, desc, hours) {
+        let unformattedStartDate = this.addDays(new Date(), noDaysBefore);
         let startDate = this.formatDate(unformattedStartDate);
 
         for (let i = 0; i < 5; i++) {

@@ -68,7 +68,7 @@
   "license": "ISC",
   "devDependencies": {
     "@cypress/xpath": "^2.0.3",
-    "cypress": "^13.16.0",
+    "cypress": "^14.1.0",
     "extract-loader": "^4.0.3",
     "lighthouse": "^12.2.2"
   },
