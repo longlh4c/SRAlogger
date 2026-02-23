@@ -62,27 +62,34 @@ class Timesheet extends commonPage {
             cy.get(ELEMENT.datePicker).click();
             cy.get(ELEMENT.monthPicker).select(month, { force: true });
             cy.wait(1000);
-            let selectDate = '//*[contains(@class, "flatpickr-day")][not(contains(@class, "flatpickr-disabled"))][@aria-label="' + startDate + '"]'
+            let selectDate = '//*[contains(@class, "flatpickr-day")][@aria-label="' + startDate + '"]'
 
-            cy.xpath(selectDate).click();
-            cy.wait(1000);
-
-            //check if not logged
-            cy.get(ELEMENT.totalTime).last().invoke('text').then(totalTime => {
-                cy.log('Logged time: ' + totalTime);
-                if (parseInt(totalTime) === 0) {
-                    cy.log('Now logging');
-                    cy.get(ELEMENT.buttonAdd).click();
-                    cy.get(ELEMENT.firstRow).should('be.visible');
-                    cy.xpath(ELEMENT.projectSelect).type(project).type('{enter}');
-                    cy.xpath(ELEMENT.typeofWorkSelect).type(typeOfWork).type('{enter}');
-                    cy.get(ELEMENT.taskDesc).type(desc);
-                    cy.get(ELEMENT.hours).type(hours);
-                    cy.get(ELEMENT.buttonSubmt).click();
-                    cy.wait(1000);
-                }
-                else {
+            cy.xpath(selectDate).then(($el) => {
+                if ($el.hasClass('flatpickr-disabled')) {
+                    cy.log('Date: "' + startDate + '" is disabled. Skipping click action.');
                     cy.get(ELEMENT.buttonCancel).click();
+                } else {
+                    cy.xpath(selectDate).click();
+                    cy.wait(1000);
+
+                    //check if not logged
+                    cy.get(ELEMENT.totalTime).last().invoke('text').then(totalTime => {
+                        cy.log('Logged time: ' + totalTime);
+                        if (parseInt(totalTime) === 0) {
+                            cy.log('Now logging');
+                            cy.get(ELEMENT.buttonAdd).click();
+                            cy.get(ELEMENT.firstRow).should('be.visible');
+                            cy.xpath(ELEMENT.projectSelect).type(project).type('{enter}');
+                            cy.xpath(ELEMENT.typeofWorkSelect).type(typeOfWork).type('{enter}');
+                            cy.get(ELEMENT.taskDesc).type(desc);
+                            cy.get(ELEMENT.hours).type(hours);
+                            cy.get(ELEMENT.buttonSubmt).click();
+                            cy.wait(1000);
+                        }
+                        else {
+                            cy.get(ELEMENT.buttonCancel).click();
+                        }
+                    });
                 }
             });
             startDate = this.formatDate(new Date(this.addDays(startDate, 1)));
