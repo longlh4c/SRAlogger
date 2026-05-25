@@ -1,2 +1,1 @@
-npx cypress open --config-file cypress-desktop.config.js
-
+ npx cypress open --config-file cypress-desktop.config.js  
