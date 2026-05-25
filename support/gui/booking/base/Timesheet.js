@@ -1,159 +1,148 @@
-import commonPage from "./CommonPage";
+import CommonPage from "./CommonPage";
+import { TimesheetElements } from "./TimesheetElements";
+import DateHelper from "../../../utils/date";
 
-const ELEMENT = {
-  buttonLog: ".text-nowrap.btn-primary",
-  buttonAdd: ".btn-add.btn-primary",
-  buttonCancel: '[data-dismiss="modal-create-work-log"]',
-  timesheetButton: '//*[text()="Timesheet"]',
-  logWorkHeader: "#modal-create-work-log___BV_modal_header_",
-  datePicker: "#startDate",
-  monthPicker: ".flatpickr-monthDropdown-months",
-  totalTime: ".modal-body .total-time.ml-2",
-  timeLineHours: "#modal-create-work-log___BV_modal_body_ .day-holiday",
-  firstRow: "tr.cursor-pointer.hia",
-  projectSelect: '(//input[@class="vs__search"])[1]',
-  typeofWorkSelect: '(//input[@class="vs__search"])[2]',
-  taskDesc: '[name="description"]',
-  hours: '[name="worked"]',
-  buttonSubmt: "button.btn-primary.mr-1",
-  successModal: ".toastification-close-icon",
-};
-
-class Timesheet extends commonPage {
+class Timesheet extends CommonPage {
+  /**
+   * Verifies the browser is currently on the Timesheet page.
+   */
   verifyUrl() {
     cy.step("Check on Timesheet page");
     cy.url().should("contain", "time-sheet");
   }
 
+  /**
+   * Verifies the Log Work modal/popup is displayed.
+   */
   checkLogworkModalDisplayed() {
-    cy.get(ELEMENT.logWorkHeader).should("be.visible");
+    cy.get(TimesheetElements.logWorkHeader).should("be.visible");
   }
 
+  /**
+   * Clicks the Timesheet navigation button in the menu.
+   */
   clickTimesheetMenuButton() {
     cy.step("Click Timesheet menu button");
-    cy.xpath(ELEMENT.timesheetButton).first().click();
+    cy.xpath(TimesheetElements.timesheetMenuButton).first().click();
   }
 
+  /**
+   * Clicks the Log Work button.
+   */
   clickLogButton() {
     cy.step("Click Log button");
-    cy.get(ELEMENT.buttonLog).first().click();
+    cy.get(TimesheetElements.buttonLog).first().click();
   }
 
+  /**
+   * Opens the calendar date picker, selects the specified month, and returns
+   * the Cypress chainable for the target day element.
+   * @param {string} formattedDate - The target date formatted (e.g. "July 19, 2024").
+   * @returns {Cypress.Chainable} Cypress element chainable for the date element.
+   */
+  selectDate(formattedDate) {
+    const month = formattedDate.split(" ")[0];
+    cy.get(TimesheetElements.datePicker).click();
+    cy.get(TimesheetElements.monthPicker).select(month, { force: true });
+    cy.wait(1000);
+    
+    const dateSelector = TimesheetElements.getDatePickerDay(formattedDate);
+    return cy.xpath(dateSelector);
+  }
+
+  /**
+   * Closes the Log Work modal by clicking the Cancel button.
+   */
+  cancelLogWork() {
+    cy.get(TimesheetElements.buttonCancel).click();
+  }
+
+  /**
+   * Fills in the log work form with details and submits it.
+   * @param {string} project - The project name.
+   * @param {string} typeOfWork - The type of work name.
+   * @param {string} desc - Description of the task.
+   * @param {number|string} hours - Hours spent on the task.
+   */
+  fillAndSubmitLogWork(project, typeOfWork, desc, hours) {
+    cy.log("Now logging");
+    cy.get(TimesheetElements.buttonAdd).click();
+    cy.get(TimesheetElements.firstRow).should("be.visible");
+    
+    cy.xpath(TimesheetElements.projectSelect)
+      .type(project)
+      .type("{enter}");
+    cy.xpath(TimesheetElements.typeofWorkSelect)
+      .type(typeOfWork)
+      .type("{enter}");
+      
+    cy.get(TimesheetElements.taskDesc).type(desc);
+    cy.get(TimesheetElements.hours).type(hours);
+    
+    cy.get(TimesheetElements.buttonSubmit).click();
+    cy.get(TimesheetElements.successModal).should("not.be.visible");
+    cy.wait(1000);
+  }
+
+  /**
+   * Automated logic to log timesheet entries for 5 consecutive days starting from a offset.
+   * Filters out weekends, holidays, disabled days in the picker, and already-logged entries.
+   * @param {number} noDaysBefore - Days offset from today to start logging.
+   * @param {string} project - Project name.
+   * @param {string} typeOfWork - Type of work name.
+   * @param {string} desc - Detailed description.
+   * @param {number|string} hours - Hours to log.
+   */
   logDate(noDaysBefore, project, typeOfWork, desc, hours) {
-    let unformattedStartDate = this.addDays(new Date(), noDaysBefore);
-    let startDate = this.formatDate(unformattedStartDate);
+    let unformattedStartDate = DateHelper.addDays(new Date(), noDaysBefore);
+    let startDate = DateHelper.formatDate(unformattedStartDate);
 
     for (let i = 0; i < 5; i++) {
-      //July 23, 2024
       this.clickLogButton();
       this.checkLogworkModalDisplayed();
 
-      let weekend = unformattedStartDate.toString().split(" ")[0];
-      if (weekend === "Sat") {
-        unformattedStartDate = new Date(this.addDays(startDate, 2));
-        startDate = this.formatDate(unformattedStartDate);
-      }
-      if (weekend === "Sun") {
-        unformattedStartDate = new Date(this.addDays(startDate, 1));
-        startDate = this.formatDate(unformattedStartDate);
+      // Automatically skip weekends and jump to the next weekday
+      if (DateHelper.isWeekend(unformattedStartDate)) {
+        unformattedStartDate = DateHelper.getNextWeekday(unformattedStartDate);
+        startDate = DateHelper.formatDate(unformattedStartDate);
       }
 
-      let month = startDate.toString().split(" ")[0];
-
-      cy.get(ELEMENT.datePicker).click();
-      cy.get(ELEMENT.monthPicker).select(month, { force: true });
-      cy.wait(1000);
-      let selectDate =
-        '//*[contains(@class, "flatpickr-day")][@aria-label="' +
-        startDate +
-        '"]';
-
-      cy.xpath(selectDate).then(($el) => {
+      this.selectDate(startDate).then(($el) => {
+        // Skip disabled dates in calendar UI
         if ($el.hasClass("flatpickr-disabled")) {
-          cy.log(
-            'Date: "' + startDate + '" is disabled. Skipping click action.',
-          );
-          cy.get(ELEMENT.buttonCancel).click();
+          cy.log(`Date: "${startDate}" is disabled. Skipping click action.`);
+          this.cancelLogWork();
         } else {
-          cy.xpath(selectDate).click();
+          cy.wrap($el).click();
           cy.wait(1000);
 
-          //check if holiday
-          cy.get(ELEMENT.timeLineHours).then(($holiday) => {
+          // Check if it's a holiday in the UI timeline
+          cy.get(TimesheetElements.timeLineHours).then(($holiday) => {
             if ($holiday.length === 2) {
-              //is holiday and not logged
-              cy.log(
-                'Date: "' +
-                  startDate +
-                  '" is holiday. Skipping log work action.',
-              );
-              cy.get(ELEMENT.buttonCancel).click();
+              cy.log(`Date: "${startDate}" is holiday. Skipping log work action.`);
+              this.cancelLogWork();
             } else {
-              //not holiday
-              //check if not logged
-              cy.get(ELEMENT.totalTime)
+              // Retrieve total logged hours for this day to avoid double-logging
+              cy.get(TimesheetElements.totalTime)
                 .last()
                 .invoke("text")
                 .then((totalTime) => {
                   cy.log("Logged time: " + totalTime);
                   if (parseInt(totalTime) === 0) {
-                    cy.log("Now logging");
-                    cy.get(ELEMENT.buttonAdd).click();
-                    cy.get(ELEMENT.firstRow).should("be.visible");
-                    cy.xpath(ELEMENT.projectSelect)
-                      .type(project)
-                      .type("{enter}");
-                    cy.xpath(ELEMENT.typeofWorkSelect)
-                      .type(typeOfWork)
-                      .type("{enter}");
-                    cy.get(ELEMENT.taskDesc).type(desc);
-                    cy.get(ELEMENT.hours).type(hours);
-                    cy.get(ELEMENT.buttonSubmt).click();
-                    cy.get(ELEMENT.successModal).should("not.be.visible");
-                    cy.wait(1000);
+                    this.fillAndSubmitLogWork(project, typeOfWork, desc, hours);
                   } else {
-                    cy.get(ELEMENT.buttonCancel).click();
+                    this.cancelLogWork();
                   }
                 });
             }
           });
         }
       });
-      startDate = this.formatDate(new Date(this.addDays(startDate, 1)));
+
+      // Move to the next day
+      unformattedStartDate = DateHelper.addDays(unformattedStartDate, 1);
+      startDate = DateHelper.formatDate(unformattedStartDate);
     }
-  }
-
-  addDays(date, quantity) {
-    const result = new Date(date);
-    result.setDate(result.getDate() + quantity);
-    cy.log("new date: " + result);
-    return result;
-  }
-
-  formatDate(dateToFormat) {
-    //startDate: Fri Jul 19 2024
-    let month = dateToFormat.toString().split(" ")[1];
-    let day = dateToFormat.toString().split(" ")[2];
-    let year = dateToFormat.toString().split(" ")[3];
-
-    if (month === "Jan") month = "January";
-    if (month === "Feb") month = "February";
-    if (month === "Mar") month = "March";
-    if (month === "Apr") month = "April";
-    if (month === "May") month = "May";
-    if (month === "Jun") month = "June";
-    if (month === "Jul") month = "July";
-    if (month === "Aug") month = "August";
-    if (month === "Sep") month = "September";
-    if (month === "Oct") month = "October";
-    if (month === "Nov") month = "November";
-    if (month === "Dec") month = "December";
-
-    if (day.substring(0, 1) === "0") day = day.substring(1);
-
-    let result = month + " " + day + ", " + year;
-    cy.log("new date: " + result);
-    return result;
   }
 }
 
