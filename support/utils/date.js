@@ -57,5 +57,16 @@ export default {
             return this.addDays(d, 1);
         }
         return d;
+    },
+
+    /**
+     * Gets the offset (in days) from today to Monday of last week.
+     * @returns {number} The offset in days (negative number).
+     */
+    getLastWeekMondayOffset() {
+        const today = new Date();
+        const day = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+        const daysToSubtract = day === 0 ? 13 : day + 6;
+        return -daysToSubtract;
     }
 };

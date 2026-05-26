@@ -1,5 +1,6 @@
 import ConfigHelper from '../../support/lib/ConfigHelper';
 import Timesheet from '../../support/gui/booking/base/Timesheet';
+import DateHelper from '../../support/utils/date';
 
 beforeEach(() => {
     // Prevent Cypress from failing on uncaught exceptions
@@ -11,10 +12,14 @@ describe('Log timesheet SRA', () => {
         cy.visit(ConfigHelper.getTimesheetURL());
         cy.pause(10000);
 
-        // let startDate = Cypress.env('startDate');
+        const offset = Cypress.env('noDaysBefore') !== undefined 
+            ? parseInt(Cypress.env('noDaysBefore')) 
+            : DateHelper.getLastWeekMondayOffset();
+
+        cy.log(`Calculated start day offset: ${offset}`);
 
         Timesheet.clickTimesheetMenuButton();
         Timesheet.verifyUrl();
-        Timesheet.logDate(-8, 'Smartbox Dedicated team', 'Test execution', 'Manual & Auto test', 8);
+        Timesheet.logDate(offset, 'Smartbox Dedicated team', 'Test execution', 'Manual & Auto test', 8);
     });
 });
