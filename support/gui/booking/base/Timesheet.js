@@ -45,7 +45,7 @@ class Timesheet extends CommonPage {
     cy.get(TimesheetElements.datePicker).click();
     cy.get(TimesheetElements.monthPicker).select(month, { force: true });
     cy.wait(1000);
-    
+
     const dateSelector = TimesheetElements.getDatePickerDay(formattedDate);
     return cy.xpath(dateSelector);
   }
@@ -68,17 +68,15 @@ class Timesheet extends CommonPage {
     cy.log("Now logging");
     cy.get(TimesheetElements.buttonAdd).click();
     cy.get(TimesheetElements.firstRow).should("be.visible");
-    
-    cy.xpath(TimesheetElements.projectSelect)
-      .type(project)
-      .type("{enter}");
+
+    cy.xpath(TimesheetElements.projectSelect).type(project).type("{enter}");
     cy.xpath(TimesheetElements.typeofWorkSelect)
       .type(typeOfWork)
       .type("{enter}");
-      
+
     cy.get(TimesheetElements.taskDesc).type(desc);
     cy.get(TimesheetElements.hours).type(hours);
-    
+
     cy.get(TimesheetElements.buttonSubmit).click();
     cy.get(TimesheetElements.successModal).should("not.be.visible");
     cy.wait(1000);
@@ -116,10 +114,13 @@ class Timesheet extends CommonPage {
           cy.wrap($el).click();
           cy.wait(1000);
 
-          // Check if it's a holiday in the UI timeline
-          cy.get(TimesheetElements.timeLineHours).then(($holiday) => {
+          // Check if it's a holiday in the UI timeline (use body.find so a missing element doesn't fail the test)
+          cy.get("body").then(($body) => {
+            const $holiday = $body.find(TimesheetElements.timeLineHours);
             if ($holiday.length === 2) {
-              cy.log(`Date: "${startDate}" is holiday. Skipping log work action.`);
+              cy.log(
+                `Date: "${startDate}" is holiday. Skipping log work action.`,
+              );
               this.cancelLogWork();
             } else {
               // Retrieve total logged hours for this day to avoid double-logging
