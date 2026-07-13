@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "/home/longlh/.local/bin/playwright-mcp",
+      "args": [
+        "--browser", "chromium",
+        "--executable-path", "/snap/bin/chromium",
+        "--user-data-dir=/home/longlh/snap/chromium/common/chromium-mcp"
+      ]
+    }
+  }
+}
