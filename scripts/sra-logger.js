@@ -10,10 +10,11 @@
  * session first.
  *
  * Usage:
- *   node scripts/sra-logger.js [offsetDays]
+ *   node scripts/sra-logger.js [offsetDays | --this-week]
  *
  *   offsetDays: days relative to today to start logging (negative = past).
- *   Defaults to "Monday of last week".
+ *   Defaults to "Monday of last week" (5 working days).
+ *   --this-week: log from Monday of this week up to today.
  *
  * Run with plain `node`, not `npx`/`npm run`.
  */
@@ -21,7 +22,14 @@
 const { chromium } = require('playwright');
 const config = require('./config');
 const TimesheetPage = require('./lib/TimesheetPage');
-const { addDays, isWeekend, getNextWeekday, getLastWeekMondayOffset } = require('./lib/dateUtils');
+const {
+  addDays,
+  isWeekend,
+  getNextWeekday,
+  getLastWeekMondayOffset,
+  getThisWeekMondayOffset,
+  getThisWeekWorkdayCount,
+} = require('./lib/dateUtils');
 
 async function processDate(timesheetPage, target) {
   const dateKey = target.toISOString().slice(0, 10);
@@ -57,11 +65,11 @@ async function processDate(timesheetPage, target) {
   return { dateKey, status: 'logged', reason: `${config.logEntry.hours}h` };
 }
 
-async function logWeek(timesheetPage, startOffset) {
+async function logWeek(timesheetPage, startOffset, daysToLog) {
   let current = addDays(new Date(), startOffset);
   const results = [];
 
-  for (let i = 0; i < config.timesheet.daysToLog; i += 1) {
+  for (let i = 0; i < daysToLog; i += 1) {
     if (isWeekend(current)) {
       current = getNextWeekday(current);
     }
@@ -82,8 +90,18 @@ async function logWeek(timesheetPage, startOffset) {
 }
 
 async function main() {
-  const offsetArg = process.argv[2];
-  const offset = offsetArg !== undefined ? parseInt(offsetArg, 10) : getLastWeekMondayOffset();
+  const arg = process.argv[2];
+  let offset;
+  let daysToLog = config.timesheet.daysToLog;
+
+  if (arg === '--this-week' || arg === 'this-week') {
+    offset = getThisWeekMondayOffset();
+    daysToLog = getThisWeekWorkdayCount();
+  } else if (arg !== undefined) {
+    offset = parseInt(arg, 10);
+  } else {
+    offset = getLastWeekMondayOffset();
+  }
 
   const context = await chromium.launchPersistentContext(config.browser.profileDir, {
     headless: false,
@@ -95,7 +113,7 @@ async function main() {
 
   try {
     await timesheetPage.ensureLoggedIn();
-    const results = await logWeek(timesheetPage, offset);
+    const results = await logWeek(timesheetPage, offset, daysToLog);
 
     console.log('\n=== Tom tat ===');
     for (const r of results) {

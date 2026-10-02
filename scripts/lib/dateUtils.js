@@ -32,8 +32,21 @@ function getLastWeekMondayOffset() {
   return -daysToSubtract;
 }
 
+function getThisWeekMondayOffset() {
+  const day = new Date().getDay();
+  return day === 0 ? -6 : -(day - 1);
+}
+
+// Number of working days from this week's Monday up to today (max 5).
+function getThisWeekWorkdayCount() {
+  const day = new Date().getDay();
+  return day === 0 ? 5 : Math.min(day, 5);
+}
+
 module.exports = {
   MONTHS,
+  getThisWeekMondayOffset,
+  getThisWeekWorkdayCount,
   addDays,
   formatDate,
   isWeekend,
