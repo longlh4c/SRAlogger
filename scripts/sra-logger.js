@@ -10,11 +10,14 @@
  * session first.
  *
  * Usage:
- *   node scripts/sra-logger.js [offsetDays | --this-week]
+ *   node scripts/sra-logger.js [offsetDays | --this-week] [--smartbox <hours>] [--jaspal <hours>]
  *
  *   offsetDays: days relative to today to start logging (negative = past).
  *   Defaults to "Monday of last week" (5 working days).
  *   --this-week: log from Monday of this week up to today.
+ *   --smartbox 6h --jaspal 2h: one row per project per day with the given
+ *   hours (e.g. "6h" or "6"). Defaults to a single Smartbox 8h row when no
+ *   project flag is given. Can be combined with the options above.
  *
  * Run with plain `node`, not `npx`/`npm run`.
  */
@@ -31,7 +34,7 @@ const {
   getThisWeekWorkdayCount,
 } = require('./lib/dateUtils');
 
-async function processDate(timesheetPage, target) {
+async function processDate(timesheetPage, target, entries) {
   const dateKey = target.toISOString().slice(0, 10);
 
   const dialog = await timesheetPage.openLogDialogFor(target);
@@ -61,11 +64,11 @@ async function processDate(timesheetPage, target) {
     return { dateKey, status: 'skipped', reason: `da log roi (${workLogHrs}h)` };
   }
 
-  await timesheetPage.fillAndSubmitLogWork(dialog);
-  return { dateKey, status: 'logged', reason: `${config.logEntry.hours}h` };
+  await timesheetPage.fillAndSubmitLogWork(dialog, entries);
+  return { dateKey, status: 'logged', reason: entries.map((e) => `${e.projectOptionName} ${e.hours}h`).join(' + ') };
 }
 
-async function logWeek(timesheetPage, startOffset, daysToLog) {
+async function logWeek(timesheetPage, startOffset, daysToLog, entries) {
   let current = addDays(new Date(), startOffset);
   const results = [];
 
@@ -75,7 +78,7 @@ async function logWeek(timesheetPage, startOffset, daysToLog) {
     }
 
     try {
-      const result = await processDate(timesheetPage, current);
+      const result = await processDate(timesheetPage, current, entries);
       results.push(result);
       console.log(`[${result.status}] ${result.dateKey}: ${result.reason}`);
     } catch (err) {
@@ -89,8 +92,40 @@ async function logWeek(timesheetPage, startOffset, daysToLog) {
   return results;
 }
 
+function parseHours(value, flag) {
+  const match = /^(\d+(?:\.\d+)?)h?$/i.exec(value ?? '');
+  if (!match || parseFloat(match[1]) <= 0) {
+    throw new Error(`Gia tri gio khong hop le cho ${flag}: "${value ?? ''}" (vd: ${flag} 6h)`);
+  }
+  return match[1];
+}
+
+// Splits argv into project rows (--smartbox 6h --jaspal 2h) and the
+// remaining positional arg (offsetDays / --this-week).
+function parseArgs(argv) {
+  const entries = [];
+  const rest = [];
+
+  for (let i = 0; i < argv.length; i += 1) {
+    const key = argv[i].startsWith('--') ? argv[i].slice(2) : null;
+    const project = key && config.projects[key];
+    if (project) {
+      i += 1;
+      entries.push({ ...project, hours: parseHours(argv[i], argv[i - 1]) });
+    } else {
+      rest.push(argv[i]);
+    }
+  }
+
+  if (entries.length === 0) {
+    const { key, hours } = config.defaultProject;
+    entries.push({ ...config.projects[key], hours });
+  }
+  return { entries, arg: rest[0] };
+}
+
 async function main() {
-  const arg = process.argv[2];
+  const { entries, arg } = parseArgs(process.argv.slice(2));
   let offset;
   let daysToLog = config.timesheet.daysToLog;
 
@@ -113,7 +148,7 @@ async function main() {
 
   try {
     await timesheetPage.ensureLoggedIn();
-    const results = await logWeek(timesheetPage, offset, daysToLog);
+    const results = await logWeek(timesheetPage, offset, daysToLog, entries);
 
     console.log('\n=== Tom tat ===');
     for (const r of results) {

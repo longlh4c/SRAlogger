@@ -99,22 +99,26 @@ class TimesheetPage {
     };
   }
 
-  async fillAndSubmitLogWork(dialog) {
-    const { logEntry } = this.config;
-
+  async fillLogRow(dialog, entry) {
     await dialog.locator(LOCATORS.addRowButton).click();
     const row = dialog.locator(LOCATORS.lastRow).last();
     const cells = row.locator('td');
 
-    await this.selectVueOption(cells.nth(2), logEntry.projectSearch, logEntry.projectOptionName);
-    await this.selectVueOption(cells.nth(3), logEntry.typeOfWorkSearch, logEntry.typeOfWorkOptionName);
-    await cells.nth(4).locator(LOCATORS.descriptionInput).first().fill(logEntry.description);
+    await this.selectVueOption(cells.nth(2), entry.projectSearch, entry.projectOptionName);
+    await this.selectVueOption(cells.nth(3), entry.typeOfWorkSearch, entry.typeOfWorkOptionName);
+    await cells.nth(4).locator(LOCATORS.descriptionInput).first().fill(entry.description);
 
     // The hours field shows a "8.00" placeholder that is NOT a real committed
     // value — submitting without re-typing it trips "Field is required".
     const hoursInput = cells.nth(5).locator(LOCATORS.hoursInput);
     await hoursInput.click();
-    await hoursInput.fill(logEntry.hours);
+    await hoursInput.fill(entry.hours);
+  }
+
+  async fillAndSubmitLogWork(dialog, entries) {
+    for (const entry of entries) {
+      await this.fillLogRow(dialog, entry);
+    }
 
     const { role, name, exact } = LOCATORS.logTimeButton;
     await dialog.getByRole(role, { name, exact }).last().click();
