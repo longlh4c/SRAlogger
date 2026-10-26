@@ -1,7 +1,22 @@
+const os = require('os');
+const path = require('path');
+const fs = require('fs');
+
+// Use whichever Playwright Chromium is already installed (avoids revision mismatch).
+function findInstalledChromium() {
+  const root = path.join(os.homedir(), '.cache', 'ms-playwright');
+  const dirs = fs.readdirSync(root).filter((d) => /^chromium-\d+$/.test(d)).sort().reverse();
+  for (const d of dirs) {
+    const bin = path.join(root, d, 'chrome-linux64', 'chrome');
+    if (fs.existsSync(bin)) return bin;
+  }
+  return undefined;
+}
+
 module.exports = {
   browser: {
-    profileDir: '/home/longlh/snap/chromium/common/chromium-mcp',
-    executablePath: '/snap/bin/chromium',
+    profileDir: path.join(os.homedir(), '.sra-logger-profile'),
+    executablePath: findInstalledChromium(),
   },
   timesheet: {
     url: 'https://sra.smartosc.com/time-sheet',
