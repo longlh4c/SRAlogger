@@ -22,7 +22,7 @@ module.exports = {
     url: 'https://sra.smartosc.com/time-sheet',
     daysToLog: 5,
   },
-  // Projects selectable from the CLI via --<key> <hours>, e.g. --smartbox 6h --jaspal 2h.
+  // Presets selectable from the CLI via --<key> <hours>, e.g. --smartbox 6h --jaspal 2h.
   // Each one becomes one row in the Log Time dialog (same day).
   projects: {
     smartbox: {
@@ -39,6 +39,13 @@ module.exports = {
       typeOfWorkOptionName: 'Test execution',
       description: 'Manual & Auto test',
     },
+  },
+  // Any other --<name> <hours> flag (e.g. --lhub 4h) selects the project whose
+  // name contains <name>, and fills the row with these defaults.
+  projectDefaults: {
+    typeOfWorkSearch: 'Test execution',
+    typeOfWorkOptionName: 'Test execution',
+    description: 'Manual & Auto test',
   },
   // Used when no project flag is given: a single Smartbox row.
   defaultProject: { key: 'smartbox', hours: '8' },

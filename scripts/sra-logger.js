@@ -16,7 +16,8 @@
  *   Defaults to "Monday of last week" (5 working days).
  *   --this-week: log from Monday of this week up to today.
  *   --smartbox 6h --jaspal 2h: one row per project per day with the given
- *   hours (e.g. "6h" or "6"). Defaults to a single Smartbox 8h row when no
+ *   hours (e.g. "6h" or "6"). Any --<name> works: unknown names (e.g. --lhub 4h)
+ *   select the project whose name contains <name>. Defaults to a single Smartbox 8h row when no
  *   project flag is given. Can be combined with the options above.
  *
  * Run with plain `node`, not `npx`/`npm run`.
@@ -100,18 +101,24 @@ function parseHours(value, flag) {
   return match[1];
 }
 
-// Splits argv into project rows (--smartbox 6h --jaspal 2h) and the
+// Splits argv into project rows (--smartbox 6h --lhub 4h) and the
 // remaining positional arg (offsetDays / --this-week).
 function parseArgs(argv) {
   const entries = [];
   const rest = [];
 
   for (let i = 0; i < argv.length; i += 1) {
-    const key = argv[i].startsWith('--') ? argv[i].slice(2) : null;
-    const project = key && config.projects[key];
-    if (project) {
+    const isFlag = argv[i].startsWith('--') && argv[i] !== '--this-week';
+    if (isFlag) {
+      const name = argv[i].slice(2);
+      const preset = config.projects[name];
       i += 1;
-      entries.push({ ...project, hours: parseHours(argv[i], argv[i - 1]) });
+      const hours = parseHours(argv[i], argv[i - 1]);
+      // Unknown names match any project whose name contains the flag text.
+      entries.push({
+        ...(preset ?? { ...config.projectDefaults, projectSearch: name, projectOptionName: name }),
+        hours,
+      });
     } else {
       rest.push(argv[i]);
     }
